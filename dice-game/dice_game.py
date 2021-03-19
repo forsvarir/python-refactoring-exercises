@@ -1,17 +1,22 @@
 import random
 import time
 
+PAUSE_PERIOD = 0
+
 def add_dice(score1, score2):
 	return score1 + score2
+
+def pause():
+	time.sleep(PAUSE_PERIOD)
 
 def playRound(name = "default"):
 	D1 = random.randint(1,6)
 	D2 = random.randint(1,6)
 	Total = add_dice(D1, D2)
 	print(name, "has rolled", D1, "and", D2)
-	time.sleep(1)
+	pause()
 	print(name, "has rolled a total of",Total)
-	time.sleep(1)
+	pause()
 	if Total %2 == 0:
 		print("You rolled an even total! You get an extra 10 points!")
 		Total = Total + 10
@@ -29,7 +34,7 @@ def playRound(name = "default"):
 	if D1 == D2:
 		D3 = random.randint(1,6)
 		Total = Total + D3
-		time.sleep(1)
+		pause()
 		print("Amazing, you rolled a double! Your new score is", Total)
 	playRound.var = Total
 
@@ -63,15 +68,15 @@ def play_game():
 		
 	while game < 6:
 		print("Round",game)
-		time.sleep(1)
+		pause()
 		player = "1"
 		player1total = playRound(p1name)
 		player1Score = player1Score + int(playRound.var)
-		time.sleep(1)
+		pause()
 		player = "2"
 		player2total = playRound(p2name)
 		player2Score = player2Score + int(playRound.var)
-		time.sleep(1)
+		pause()
 		game = game + 1
 		
 	print(p1name, "has a score of", player1Score, "and", p2name, "has a score of", player2Score)
