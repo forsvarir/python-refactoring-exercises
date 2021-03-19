@@ -2,9 +2,16 @@ import random
 import time
 
 PAUSE_PERIOD = 0
+EVEN_BONUS = 10
 
 def add_dice(score1, score2):
 	return score1 + score2
+
+def calculate_score(score1, score2):
+	dice_total = add_dice(score1, score2)
+	if (dice_total % 2 == 0):
+		return dice_total + EVEN_BONUS
+	return dice_total
 
 def pause():
 	time.sleep(PAUSE_PERIOD)
