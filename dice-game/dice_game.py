@@ -10,15 +10,38 @@ MINIMUM_SCORE = 0
 def add_dice(score1, score2):
 	return score1 + score2
 
-def calculate_score(score1, score2, roller = lambda : random.randint(1,6)):
+def rolled_double(total, roller):
+	even_score = rolled_even(total)
+	double_score = even_score + roller()
+	print("Amazing, you rolled a double! Your new score is", double_score)
+	return double_score
+
+def rolled_even(total):
+	print("You rolled an even total! You get an extra 10 points!")
+	new_total = total + EVEN_BONUS
+	print("Your new total is",new_total)
+	return new_total
+
+def rolled_low_odd(total):
+	rolled_odd(total)
+	print("You cannot go below 0, your new total is 0")
+	return MINIMUM_SCORE
+
+def rolled_odd(total):
+	print("You rolled an odd total, you lose 5 points")
+	new_total = total - ODD_PENALTY
+	print("Your new total is", new_total)
+	return new_total
+
+def calculate_score(score1, score2, roller = lambda : random.randint(1,6), printer = lambda x: ()):
 	dice_total = add_dice(score1, score2)
 	if(score1 == score2):
-		return dice_total + EVEN_BONUS + roller()
+		return rolled_double(dice_total, roller)
 	if (dice_total % 2 == 0):
-		return dice_total + EVEN_BONUS
+		return rolled_even(dice_total)
 	if (dice_total < ODD_PENALTY):
-		return MINIMUM_SCORE
-	return dice_total - ODD_PENALTY
+		return rolled_low_odd(dice_total)
+	return rolled_odd(dice_total)
 
 def pause():
 	time.sleep(PAUSE_PERIOD)
@@ -26,38 +49,15 @@ def pause():
 def random_roller():
 	return random.randint(1,6)
 
-def playRound(name = "default"):
-	D1 = random.randint(1,6)
-	D2 = random.randint(1,6)
-	Total = add_dice(D1, D2)
-	print(name, "has rolled", D1, "and", D2)
+def play_round(name, roller = lambda : random.randint(1,6), printer = lambda x: print(x)):
+	dice_1 = roller()
+	dice_2 = roller()
+	printer(name + " has rolled " + str(dice_1) + " and " + str(dice_2))
 	pause()
-	print(name, "has rolled a total of",Total)
-	pause()
-	if Total %2 == 0:
-		print("You rolled an even total! You get an extra 10 points!")
-		Total = Total + 10
-		print("Your new total is",Total)
-
-	else:
-		print("You rolled an odd total, you lose 5 points")
-		Total = Total - 5
-		print("Your new total is", Total)
-		
-		if Total < 0:
-			Total = 0
-			print("You cannot go below 0, your new total is 0")
-
-	if D1 == D2:
-		D3 = random.randint(1,6)
-		Total = Total + D3
-		pause()
-		print("Amazing, you rolled a double! Your new score is", Total)
-	playRound.var = Total
+	printer(name + " has rolled a total of " + str(add_dice(dice_1, dice_2)))
+	return calculate_score(dice_1, dice_2, roller, printer)
 
 def play_game():
-	player1total = 0
-	player2total = 0
 	player1Score = 0
 	player2Score = 0
 	game = 1
@@ -87,12 +87,10 @@ def play_game():
 		print("Round",game)
 		pause()
 		player = "1"
-		player1total = playRound(p1name)
-		player1Score = player1Score + int(playRound.var)
+		player1Score = player1Score + play_round(p1name)
 		pause()
 		player = "2"
-		player2total = playRound(p2name)
-		player2Score = player2Score + int(playRound.var)
+		player2Score = player2Score + play_round(p2name)
 		pause()
 		game = game + 1
 		
@@ -125,20 +123,4 @@ def play_game():
 
 if __name__ == "__main__":
 	play_game()
-
-#highScore = open("scores.txt", "r")
-#fileCount = 1
-#added = False
-#highScore.readline()
-
-
-
-
-
-
-
-
-
-
-
 
