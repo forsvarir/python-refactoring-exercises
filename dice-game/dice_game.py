@@ -70,31 +70,12 @@ def read_all_lines_from_file(filename):
 def strip_newlines(items):
     return list(map(lambda s: s.rstrip('\n'), items))
 
-def play_game(whitelist):
-	player1Score = 0
-	player2Score = 0
-	game = 1
-	count = 0
-	nameToCheck = "yes"
+def update_scores_file(p1name, player1Score, p2name, player2Score):
+	with open("scores.txt", "a") as source_file:
+		source_file.write(p1name + ", " + str(player1Score) + "\n")
+		source_file.write(p2name + ", " + str(player2Score) + "\n")
 
-	p1name = input("Player 1, what is your name: ")
-	p2name = input("Player 2, what is your name: ")
-
-	if is_invalid_name(whitelist, p1name) or is_invalid_name(whitelist, p2name):
-		print("Incorrect names")
-		exit()
-		
-	while game < 6:
-		print("Round",game)
-		pause()
-		player = "1"
-		player1Score = player1Score + play_round(p1name)
-		pause()
-		player = "2"
-		player2Score = player2Score + play_round(p2name)
-		pause()
-		game = game + 1
-		
+def evaluate_winner(p1name, player1Score, p2name, player2Score):
 	print(p1name, "has a score of", player1Score, "and", p2name, "has a score of", player2Score)
 	if player1Score != player2Score and player1Score > player2Score:
 		print(p1name, "has won!")
@@ -114,13 +95,31 @@ def play_game(whitelist):
 		elif p2Roll < p2Roll:
 			print(p2name, "has won!")
 
-	sf = open("scores.txt", "a")
-	p1write = p1name + ", " + str(player1Score)
-	p2write = p2name + ", " + str(player2Score)
-	sf.write(p1write + "\n")
-	sf.write(p2write + "\n")
 
-	sf.close()
+def play_game(whitelist):
+	player1Score = 0
+	player2Score = 0
+	game = 1
+
+	p1name = input("Player 1, what is your name: ")
+	p2name = input("Player 2, what is your name: ")
+
+	if is_invalid_name(whitelist, p1name) or is_invalid_name(whitelist, p2name):
+		print("Incorrect names")
+		exit()
+		
+	while game < 6:
+		print("Round",game)
+		pause()
+		player1Score = player1Score + play_round(p1name)
+		pause()
+		player2Score = player2Score + play_round(p2name)
+		pause()
+		game = game + 1
+		
+	evaluate_winner(p1name, player1Score, p2name, player2Score)
+
+	update_scores_file(p1name, player1Score, p2name, player2Score)
 
 if __name__ == "__main__":
 	play_game(strip_newlines(read_all_lines_from_file("whitelist.txt")))
