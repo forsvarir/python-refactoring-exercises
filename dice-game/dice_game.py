@@ -1,3 +1,4 @@
+from enum import Enum
 import random
 import time
 
@@ -9,8 +10,10 @@ MINIMUM_SCORE = 0
 def add_dice(score1, score2):
 	return score1 + score2
 
-def calculate_score(score1, score2):
+def calculate_score(score1, score2, roller = lambda : random.randint(1,6)):
 	dice_total = add_dice(score1, score2)
+	if(score1 == score2):
+		return dice_total + EVEN_BONUS + roller()
 	if (dice_total % 2 == 0):
 		return dice_total + EVEN_BONUS
 	if (dice_total < ODD_PENALTY):
@@ -19,6 +22,9 @@ def calculate_score(score1, score2):
 
 def pause():
 	time.sleep(PAUSE_PERIOD)
+
+def random_roller():
+	return random.randint(1,6)
 
 def playRound(name = "default"):
 	D1 = random.randint(1,6)
