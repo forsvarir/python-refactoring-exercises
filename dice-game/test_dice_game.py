@@ -1,5 +1,6 @@
 from dice_game import add_dice
 from dice_game import calculate_score
+from dice_game import is_valid_name
 import unittest
 
 class TestDiceUtils(unittest.TestCase):
@@ -23,3 +24,15 @@ class TestDiceUtils(unittest.TestCase):
 
     def test_calculate_score_roll_double_adds_ten_and_new_roll(self):
         self.assertEqual(17, calculate_score(1,1, lambda:5))
+
+    def test_is_valid_for_valid_name(self):
+        names = ["player"]
+        self.assertTrue(is_valid_name(names, "player"))
+
+    def test_is_valid_for_valid_name_end_of_list(self):
+        names = ["p1", "p2", "p3", "p4", "valid player"]
+        self.assertTrue(is_valid_name(names, "valid player"))
+
+    def test_id_valid_invalid_name(self):
+        names = ["p1", "p2"]
+        self.assertFalse(is_valid_name(names, "invalid player"))

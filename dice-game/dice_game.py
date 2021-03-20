@@ -57,7 +57,20 @@ def play_round(name, roller = lambda : random.randint(1,6), printer = lambda x: 
 	printer(name + " has rolled a total of " + str(add_dice(dice_1, dice_2)))
 	return calculate_score(dice_1, dice_2, roller, printer)
 
-def play_game():
+def is_valid_name(names, name):
+	return name in names
+
+def is_invalid_name(names, name):
+	return not is_valid_name(names, name)
+
+def read_all_lines_from_file(filename):
+    with open(filename, 'r') as source_file:
+        return source_file.readlines()
+
+def strip_newlines(items):
+    return list(map(lambda s: s.rstrip('\n'), items))
+
+def play_game(whitelist):
 	player1Score = 0
 	player2Score = 0
 	game = 1
@@ -66,20 +79,8 @@ def play_game():
 
 	p1name = input("Player 1, what is your name: ")
 	p2name = input("Player 2, what is your name: ")
-	fh = open("whitelist.txt", "r")
 
-		
-	while count < 3 and nameToCheck != "": 
-		nameToCheck = fh.readline()[:-1]
-		if nameToCheck == "":
-			break
-	#	print("DEBUG",nameToCheck)
-	#	print("DEBUG",count)
-		if nameToCheck == p1name or nameToCheck == p2name:
-			count = count + 1
-	fh.close()
-		
-	if count != 2:
+	if is_invalid_name(whitelist, p1name) or is_invalid_name(whitelist, p2name):
 		print("Incorrect names")
 		exit()
 		
@@ -122,5 +123,5 @@ def play_game():
 	sf.close()
 
 if __name__ == "__main__":
-	play_game()
+	play_game(strip_newlines(read_all_lines_from_file("whitelist.txt")))
 
