@@ -111,11 +111,11 @@ def play_game(whitelist):
 	while round_number < 6:
 		print("Round",round_number)
 		pause()
-		player1Score = player1Score + play_round(p1name)
+		player1Score += play_round(p1name)
 		pause()
-		player2Score = player2Score + play_round(p2name)
+		player2Score += play_round(p2name)
 		pause()
-		round_number = round_number + 1
+		round_number += 1
 		
 	winner = evaluate_winner(p1name, player1Score, p2name, player2Score)
 	print(winner + " has won!")
