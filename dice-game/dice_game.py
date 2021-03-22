@@ -75,26 +75,26 @@ def update_scores_file(p1name, player1Score, p2name, player2Score):
 		source_file.write(p1name + ", " + str(player1Score) + "\n")
 		source_file.write(p2name + ", " + str(player2Score) + "\n")
 
-def evaluate_winner(p1name, player1Score, p2name, player2Score):
+def evaluate_winner(p1name, player1Score, p2name, player2Score, roller = random.randint(1,6)):
+	winner = ""
 	print(p1name, "has a score of", player1Score, "and", p2name, "has a score of", player2Score)
-	if player1Score != player2Score and player1Score > player2Score:
-		print(p1name, "has won!")
+	if player1Score > player2Score:
+		return p1name
 
-	elif player1Score != player2Score and player1Score < player2Score:
-		print(p2name, "has won!")
+	if player1Score < player2Score:
+		return p2name
 
-	while player1Score == player2Score:
+	while True:
 		print("It's a draw!")
-		p1Roll = random.randint(1,6)
-		p2Roll = random.randint(1,6)
+		p1Roll = roller()
+		p2Roll = roller()
 		print(p1name, "rolled", p1Roll, "and", p2name, "rolled", p2Roll)
 		
 		if p1Roll > p2Roll:
-			print(p1name, "has won!")
+			return p1name
 		
-		elif p2Roll < p2Roll:
-			print(p2name, "has won!")
-
+		if p1Roll < p2Roll:
+			return p2name
 
 def play_game(whitelist):
 	player1Score = 0
@@ -117,7 +117,8 @@ def play_game(whitelist):
 		pause()
 		game = game + 1
 		
-	evaluate_winner(p1name, player1Score, p2name, player2Score)
+	winner = evaluate_winner(p1name, player1Score, p2name, player2Score)
+	print(winner + " has won!")
 
 	update_scores_file(p1name, player1Score, p2name, player2Score)
 

@@ -1,6 +1,8 @@
 from dice_game import add_dice
 from dice_game import calculate_score
 from dice_game import is_valid_name
+from dice_game import evaluate_winner
+import collections
 import unittest
 
 class TestDiceUtils(unittest.TestCase):
@@ -36,3 +38,17 @@ class TestDiceUtils(unittest.TestCase):
     def test_id_valid_invalid_name(self):
         names = ["p1", "p2"]
         self.assertFalse(is_valid_name(names, "invalid player"))
+
+    def test_evaluate_winner_player1_high_score(self):
+        self.assertEqual("player1", evaluate_winner("player1", 100, "player2", 1))
+
+    def test_evaluate_winner_player2_high_score(self):
+        self.assertEqual("player2", evaluate_winner("player1", 5, "player2", 10))
+
+    def test_evaluate_winner_draw_player1_wins_rolloff(self):
+        rolls = collections.deque([5, 1])
+        self.assertEqual("player1", evaluate_winner("player1", 1, "player2", 1, lambda : rolls.popleft()))
+
+    def test_evaluate_winner_draw_player2_wins_rolloff(self):
+        rolls = collections.deque([1, 1, 2, 4])
+        self.assertEqual("player2", evaluate_winner("player1", 1, "player2", 1, lambda : rolls.popleft()))
