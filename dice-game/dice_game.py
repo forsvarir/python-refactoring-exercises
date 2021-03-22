@@ -99,7 +99,6 @@ def evaluate_winner(p1name, player1Score, p2name, player2Score, roller = random.
 def play_game(whitelist):
 	player1Score = 0
 	player2Score = 0
-	game = 1
 
 	p1name = input("Player 1, what is your name: ")
 	p2name = input("Player 2, what is your name: ")
@@ -108,14 +107,15 @@ def play_game(whitelist):
 		print("Incorrect names")
 		exit()
 		
-	while game < 6:
-		print("Round",game)
+	round_number = 1
+	while round_number < 6:
+		print("Round",round_number)
 		pause()
 		player1Score = player1Score + play_round(p1name)
 		pause()
 		player2Score = player2Score + play_round(p2name)
 		pause()
-		game = game + 1
+		round_number = round_number + 1
 		
 	winner = evaluate_winner(p1name, player1Score, p2name, player2Score)
 	print(winner + " has won!")
