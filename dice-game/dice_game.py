@@ -105,10 +105,9 @@ def ask_for_name(name):
 	return input(name + ", what is your name?: ")
 
 def play_game(whitelist):
-	player1 = Player(ask_for_name("Player 1"))
-	player2 = Player(ask_for_name("Player 2"))
+	players = [Player(ask_for_name("Player 1")),Player(ask_for_name("Player 2"))]
 
-	if is_invalid_name(whitelist, player1.name) or is_invalid_name(whitelist, player2.name):
+	if is_invalid_name(whitelist, players[0].name) or is_invalid_name(whitelist, players[0].name):
 		print("Incorrect names")
 		exit()
 		
@@ -116,16 +115,16 @@ def play_game(whitelist):
 	while round_number < 6:
 		print("Round",round_number)
 		pause()
-		player1.score += play_round(player1.name)
+		players[0].score += play_round(players[0].name)
 		pause()
-		player2.score += play_round(player2.name)
+		players[1].score += play_round(players[1].name)
 		pause()
 		round_number += 1
 		
-	winner = evaluate_winner(player1, player2)
+	winner = evaluate_winner(players[0], players[1])
 	print(winner.name + " has won!")
 
-	update_scores_file(player1.name, player1.score, player2.name, player2.score)
+	update_scores_file(players[0].name, players[0].score, players[1].name, players[1].score)
 
 if __name__ == "__main__":
 	play_game(strip_newlines(read_all_lines_from_file("whitelist.txt")))
