@@ -111,14 +111,12 @@ def play_game(whitelist):
 		print("Incorrect names")
 		exit()
 		
-	round_number = 1
-	while round_number < 6:
+	for round_number in range(1, 7):
 		print("Round",round_number)
 		pause()
 		for player in players:
 			player.score += play_round(player.name)
 			pause()
-		round_number += 1
 		
 	winner = evaluate_winner(players[0], players[1])
 	print(winner.name + " has won!")
