@@ -38,7 +38,7 @@ def rolled_odd(total):
 	print("Your new total is", new_total)
 	return new_total
 
-def calculate_score(score1, score2, roller = lambda : random.randint(1,6), printer = lambda x: ()):
+def calculate_score(score1, score2, roller = lambda : random.randint(1,6)):
 	dice_total = add_dice(score1, score2)
 	if(score1 == score2):
 		return rolled_double(dice_total, roller)
@@ -54,13 +54,13 @@ def pause():
 def random_roller():
 	return random.randint(1,6)
 
-def play_round(name, roller = lambda : random.randint(1,6), printer = lambda x: print(x)):
+def play_round(name, roller = lambda : random.randint(1,6)):
 	dice_1 = roller()
 	dice_2 = roller()
-	printer(name + " has rolled " + str(dice_1) + " and " + str(dice_2))
+	print(name + " has rolled " + str(dice_1) + " and " + str(dice_2))
 	pause()
-	printer(name + " has rolled a total of " + str(add_dice(dice_1, dice_2)))
-	return calculate_score(dice_1, dice_2, roller, printer)
+	print(name + " has rolled a total of " + str(add_dice(dice_1, dice_2)))
+	return calculate_score(dice_1, dice_2, roller)
 
 def is_valid_name(names, name):
 	return name in names
