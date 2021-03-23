@@ -75,10 +75,10 @@ def read_all_lines_from_file(filename):
 def strip_newlines(items):
     return list(map(lambda s: s.rstrip('\n'), items))
 
-def update_scores_file(p1name, player1Score, p2name, player2Score):
+def update_scores_file(players):
 	with open("scores.txt", "a") as source_file:
-		source_file.write(p1name + ", " + str(player1Score) + "\n")
-		source_file.write(p2name + ", " + str(player2Score) + "\n")
+		for player in players:
+			source_file.write(player.name + ", " + str(player.score) + "\n")
 
 def evaluate_winner(player1, player2, roller = random.randint(1,6)):
 	winner = ""
@@ -107,7 +107,7 @@ def ask_for_name(name):
 def play_game(whitelist):
 	players = [Player(ask_for_name("Player 1")),Player(ask_for_name("Player 2"))]
 
-	if is_invalid_name(whitelist, players[0].name) or is_invalid_name(whitelist, players[0].name):
+	if any(is_invalid_name(whitelist, player.name) for player in players):
 		print("Incorrect names")
 		exit()
 		
@@ -115,16 +115,15 @@ def play_game(whitelist):
 	while round_number < 6:
 		print("Round",round_number)
 		pause()
-		players[0].score += play_round(players[0].name)
-		pause()
-		players[1].score += play_round(players[1].name)
-		pause()
+		for player in players:
+			player.score += play_round(player.name)
+			pause()
 		round_number += 1
 		
 	winner = evaluate_winner(players[0], players[1])
 	print(winner.name + " has won!")
 
-	update_scores_file(players[0].name, players[0].score, players[1].name, players[1].score)
+	update_scores_file(players)
 
 if __name__ == "__main__":
 	play_game(strip_newlines(read_all_lines_from_file("whitelist.txt")))
