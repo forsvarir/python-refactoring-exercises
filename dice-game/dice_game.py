@@ -38,7 +38,7 @@ def rolled_odd(total):
 	print("Your new total is", new_total)
 	return new_total
 
-def calculate_score(score1, score2, roller = lambda : random.randint(1,6)):
+def calculate_score(score1, score2, roller = lambda : random_roller):
 	dice_total = add_dice(score1, score2)
 	if(score1 == score2):
 		return rolled_double(dice_total, roller)
@@ -54,7 +54,7 @@ def pause():
 def random_roller():
 	return random.randint(1,6)
 
-def play_round(name, roller = lambda : random.randint(1,6)):
+def play_round(name, roller = lambda : random_roller()):
 	dice_1 = roller()
 	dice_2 = roller()
 	print(name + " has rolled " + str(dice_1) + " and " + str(dice_2))
@@ -80,7 +80,7 @@ def update_scores_file(players):
 		for player in players:
 			source_file.write(player.name + ", " + str(player.score) + "\n")
 
-def evaluate_winner(player1, player2, roller = random.randint(1,6)):
+def evaluate_winner(player1, player2, roller = lambda: random_roller):
 	winner = ""
 	print(player1.name, "has a score of", player1.score, "and", player2.name, "has a score of", player2.score)
 	if player1.score > player2.score:
