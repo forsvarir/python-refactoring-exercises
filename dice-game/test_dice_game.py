@@ -2,6 +2,7 @@ from dice_game import add_dice
 from dice_game import calculate_score
 from dice_game import is_valid_name
 from dice_game import evaluate_winner
+from dice_game import Player
 import collections
 import unittest
 
@@ -40,15 +41,20 @@ class TestDiceUtils(unittest.TestCase):
         self.assertFalse(is_valid_name(names, "invalid player"))
 
     def test_evaluate_winner_player1_high_score(self):
-        self.assertEqual("player1", evaluate_winner("player1", 100, "player2", 1))
+        winning_player = evaluate_winner(Player("player1", 100), Player("player2", 1))
+        self.assertEqual("player1", winning_player.name)
 
     def test_evaluate_winner_player2_high_score(self):
-        self.assertEqual("player2", evaluate_winner("player1", 5, "player2", 10))
+        winning_player = evaluate_winner(Player("player1", 5), Player("player2", 10))
+        self.assertEqual("player2", winning_player.name)
 
     def test_evaluate_winner_draw_player1_wins_rolloff(self):
         rolls = collections.deque([5, 1])
-        self.assertEqual("player1", evaluate_winner("player1", 1, "player2", 1, lambda : rolls.popleft()))
+
+        winning_player = evaluate_winner(Player("player1", 1), Player("player2", 1), lambda : rolls.popleft())
+        self.assertEqual("player1", winning_player.name)
 
     def test_evaluate_winner_draw_player2_wins_rolloff(self):
         rolls = collections.deque([1, 1, 2, 4])
-        self.assertEqual("player2", evaluate_winner("player1", 1, "player2", 1, lambda : rolls.popleft()))
+        winning_player = evaluate_winner(Player("player1", 1), Player("player2", 1), lambda : rolls.popleft())
+        self.assertEqual("player2", winning_player.name)

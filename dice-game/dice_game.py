@@ -8,9 +8,9 @@ ODD_PENALTY = 5
 MINIMUM_SCORE = 0
 
 class Player:
-	def __init__(self, name):
+	def __init__(self, name, score = 0):
 		self.name = name
-		self.score = 0
+		self.score = score
 
 def add_dice(score1, score2):
 	return score1 + score2
@@ -80,26 +80,26 @@ def update_scores_file(p1name, player1Score, p2name, player2Score):
 		source_file.write(p1name + ", " + str(player1Score) + "\n")
 		source_file.write(p2name + ", " + str(player2Score) + "\n")
 
-def evaluate_winner(p1name, player1Score, p2name, player2Score, roller = random.randint(1,6)):
+def evaluate_winner(player1, player2, roller = random.randint(1,6)):
 	winner = ""
-	print(p1name, "has a score of", player1Score, "and", p2name, "has a score of", player2Score)
-	if player1Score > player2Score:
-		return p1name
+	print(player1.name, "has a score of", player1.score, "and", player2.name, "has a score of", player2.score)
+	if player1.score > player2.score:
+		return player1
 
-	if player1Score < player2Score:
-		return p2name
+	if player1.score < player2.score:
+		return player2
 
 	while True:
 		print("It's a draw!")
 		p1Roll = roller()
 		p2Roll = roller()
-		print(p1name, "rolled", p1Roll, "and", p2name, "rolled", p2Roll)
+		print(player1.name, "rolled", p1Roll, "and", player2.name, "rolled", p2Roll)
 		
 		if p1Roll > p2Roll:
-			return p1name
+			return player1
 		
 		if p1Roll < p2Roll:
-			return p2name
+			return player2
 
 def ask_for_name(name):
 	return input(name + ", what is your name?: ")
@@ -122,8 +122,8 @@ def play_game(whitelist):
 		pause()
 		round_number += 1
 		
-	winner = evaluate_winner(player1.name, player1.score, player2.name, player2.score)
-	print(winner + " has won!")
+	winner = evaluate_winner(player1, player2)
+	print(winner.name + " has won!")
 
 	update_scores_file(player1.name, player1.score, player2.name, player2.score)
 
