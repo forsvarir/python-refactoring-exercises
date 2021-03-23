@@ -7,6 +7,11 @@ EVEN_BONUS = 10
 ODD_PENALTY = 5
 MINIMUM_SCORE = 0
 
+class Player:
+	def __init__(self, name):
+		self.name = name
+		self.score = 0
+
 def add_dice(score1, score2):
 	return score1 + score2
 
@@ -96,14 +101,14 @@ def evaluate_winner(p1name, player1Score, p2name, player2Score, roller = random.
 		if p1Roll < p2Roll:
 			return p2name
 
+def ask_for_name(name):
+	return input(name + ", what is your name?: ")
+
 def play_game(whitelist):
-	player1Score = 0
-	player2Score = 0
+	player1 = Player(ask_for_name("Player 1"))
+	player2 = Player(ask_for_name("Player 2"))
 
-	p1name = input("Player 1, what is your name: ")
-	p2name = input("Player 2, what is your name: ")
-
-	if is_invalid_name(whitelist, p1name) or is_invalid_name(whitelist, p2name):
+	if is_invalid_name(whitelist, player1.name) or is_invalid_name(whitelist, player2.name):
 		print("Incorrect names")
 		exit()
 		
@@ -111,16 +116,16 @@ def play_game(whitelist):
 	while round_number < 6:
 		print("Round",round_number)
 		pause()
-		player1Score += play_round(p1name)
+		player1.score += play_round(player1.name)
 		pause()
-		player2Score += play_round(p2name)
+		player2.score += play_round(player2.name)
 		pause()
 		round_number += 1
 		
-	winner = evaluate_winner(p1name, player1Score, p2name, player2Score)
+	winner = evaluate_winner(player1.name, player1.score, player2.name, player2.score)
 	print(winner + " has won!")
 
-	update_scores_file(p1name, player1Score, p2name, player2Score)
+	update_scores_file(player1.name, player1.score, player2.name, player2.score)
 
 if __name__ == "__main__":
 	play_game(strip_newlines(read_all_lines_from_file("whitelist.txt")))
